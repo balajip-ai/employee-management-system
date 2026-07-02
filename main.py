@@ -1,4 +1,31 @@
+import csv
+import os
+
 employees = []
+
+
+def load_employees():
+    if os.path.exists("employee.csv"):
+        with open("employee.csv", "r", newline="") as file:
+            reader = csv.DictReader(file)
+            employees.clear()
+            for row in reader:
+                employees.append(row)
+
+
+def save_employees():
+    with open("employee.csv", "w", newline="") as file:
+        fieldnames = ["id", "name", "age", "department", "designation", "salary"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+        writer.writeheader()
+
+        for employee in employees:
+            writer.writerow(employee)
+
+
+load_employees()
+
 
 while True:
 
@@ -32,6 +59,8 @@ while True:
         }
 
         employees.append(employee)
+
+        save_employees()
 
         print("\n✅ Employee added successfully!")
 
@@ -96,6 +125,8 @@ while True:
                 emp["designation"] = input("Enter New Designation: ")
                 emp["salary"] = input("Enter New Salary: ")
 
+                save_employees()
+
                 print("\nEmployee updated successfully!")
 
                 found = True
@@ -116,6 +147,8 @@ while True:
             if emp["id"] == delete_id:
 
                 employees.remove(emp)
+
+                save_employees()
 
                 print("\nEmployee deleted successfully!")
 
